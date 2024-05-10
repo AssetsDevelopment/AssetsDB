@@ -24,5 +24,10 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+    - name: Build Docker Image
+      run: |
+        docker buildx create --name mybuilder --bootstrap --use
+        docker buildx build --platform linux/amd64,linux/arm64 -t nachodocker1714/assets-db:1.0.1 --push .
 #    - name: Build the Docker image
 #      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
