@@ -25,4 +25,4 @@ jobs:
       run: |
         echo "Iniciando login"
         echo $DOCKER_USER 
-        echo DOCKER_PASSWORD
+        echo $DOCKER_PASSWORD
