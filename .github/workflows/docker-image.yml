@@ -23,6 +23,6 @@ jobs:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
         DOCKER_PASSWORD: ${{ secrets.PASSWORD }}
       run: |
-        echo $DOCKER_PASSWORD | docker login -u nachodocker1714 --password-stdin
+        echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
 #    - name: Build the Docker image
 #      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
