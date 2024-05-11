@@ -12,6 +12,7 @@ VALUES
   (1, 'user1', 'user1@gmail.com', 'pppppppp', true),
   (1, 'user2', 'user2@gmail.com', 'pppppppp', false),
   (1, 'user3', 'user3@gmail.com', 'pppppppp', false);
+  (1, 'user4', 'user4@gmail.com', 'pppppppp', false);
 -----------------------------------------------------------------------------------------------
 -- SCREEN
 -----------------------------------------------------------------------------------------------
