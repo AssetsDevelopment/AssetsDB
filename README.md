@@ -1,3 +1,28 @@
+# Commits
+
+Este repositorio se encuentra vinculado a un repositorio de GitHub, el mismo posee una configuracion de GitHub Actions que se encarga de construir y pushear la imagen de Docker a Docker Hub, ademas de controlar el versionado de la imagen.
+
+- Para realizar un commit se debe seguir el siguiente formato:
+  - *Mayor:* `git commit -m "mayor: [nombre de la funcionalidad]"` formato para incrementar la version mayor.
+  - *Minor:* `git commit -m "feat: [nombre de la funcionalidad]"` formato para incrementar la version minor.
+  - *Patch:* `git commit -m "[nombre de la funcionalidad]"` formato para incrementar la version patch.
+
+---
+
+# Docker
+
+## Construir la imagen
+```bash
+docker compose build --no-cache
+```
+
+## Correr los contenedores
+```bash
+docker compose up -d
+```
+
+---
+
 # Modelo de Base de Datos Centralizada con Lógica de Invitación
 
 En este modelo, se sigue un enfoque centralizado donde se almacenan los datos de todos los clientes en una sola base de datos compartida. La lógica de invitación se implementa para controlar el acceso de cada cliente a sus datos específicos. Cada entidad en la base de datos tiene un atributo que asocia los datos con el cliente al que pertenecen.
