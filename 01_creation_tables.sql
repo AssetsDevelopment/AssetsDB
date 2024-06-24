@@ -28,8 +28,9 @@ CREATE TYPE "profile_options" AS ENUM (
 DROP TABLE IF EXISTS "client" CASCADE;
 CREATE TABLE "client" (
   "client_id" 	    INTEGER generated ALWAYS as IDENTITY PRIMARY KEY,
-  "name" 		        VARCHAR(100) 	                  NOT NULL,
-  "is_active" 	    BOOLEAN 		                    NOT NULL DEFAULT true,
+    "name" 		    VARCHAR(100) 	                  NOT NULL,
+  "is_active" 	    BOOLEAN 		                  NOT NULL DEFAULT true,
+  "user_type"       CHAR(9)                           NOT NULL DEFAULT 'client',
   "created_at" 	    TIMESTAMP 		                  NOT NULL DEFAULT 'now()',
   "updated_at" 	    TIMESTAMP 		                  NOT NULL DEFAULT 'now()'
 );
@@ -79,20 +80,21 @@ CREATE TABLE "permission" (
 DROP TABLE IF EXISTS "professional" CASCADE;
 CREATE TABLE "professional" (
   "professional_id" INTEGER generated ALWAYS as IDENTITY PRIMARY KEY,
-  "name" 		        VARCHAR(100)                    NOT NULL,
-  "last_name" 		        VARCHAR(100)                    NOT NULL,
-  "gender" 		      gender_options                  NOT NULL,
-  "cuit" 		        VARCHAR(20),
+  "name" 		    VARCHAR(100)                    NOT NULL,
+  "last_name" 		VARCHAR(100)                    NOT NULL,
+  "gender" 		    gender_options                  NOT NULL,
+  "cuit" 		    VARCHAR(20),
   "fiscal_status"   fiscal_status,
-  "phone" 		      VARCHAR(30),         
-  "email" 		      VARCHAR(255),        
-  "password" 	      VARCHAR(255)                    NOT NULL,
+  "phone" 		    VARCHAR(30),         
+  "email" 		    VARCHAR(255),        
+  "password" 	    VARCHAR(255)                    NOT NULL,
   "birthdate" 	    date,
-  "bank" 		        VARCHAR(255),
+  "bank" 		    VARCHAR(255),
   "bank_account"    VARCHAR(50),
-  "cbu" 		        VARCHAR(23),
+  "cbu" 		    VARCHAR(23),
   "alias"           VARCHAR(50),
-  "note" 		        TEXT,
+  "note" 		    TEXT,
+  "user_type"       CHAR(9)                         NOT NULL DEFAULT 'professional',
   "created_at" 	    TIMESTAMP 	                    NOT NULL DEFAULT 'now()',
   "updated_at" 	    TIMESTAMP 	                    NOT NULL DEFAULT 'now()'
   
@@ -151,12 +153,12 @@ CREATE TABLE "company" (
   "company_id" 	INTEGER generated ALWAYS as IDENTITY PRIMARY KEY,
   "client_fk"   INTEGER 		  NOT NULL REFERENCES "client"(client_id),
   "user_fk"     INTEGER 		  NOT NULL REFERENCES "user"(user_id),
-  "name" 		    VARCHAR(100) 	NOT NULL,
-  "cuit" 		    VARCHAR(20),
-  "note" 		    TEXT,
+  "name" 		VARCHAR(100) 	  NOT NULL,
+  "cuit" 		VARCHAR(20),
+  "note" 		TEXT,
   "is_active" 	BOOLEAN 		  NOT NULL DEFAULT true,
-  "created_at" 	TIMESTAMP 		NOT NULL DEFAULT 'now()',
-  "updated_at" 	TIMESTAMP 		NOT NULL DEFAULT 'now()'
+  "created_at" 	TIMESTAMP 		  NOT NULL DEFAULT 'now()',
+  "updated_at" 	TIMESTAMP 		  NOT NULL DEFAULT 'now()'
 
 );
 -----------------------------------------------------------------------------------------------
@@ -166,9 +168,9 @@ DROP TABLE IF EXISTS "patient" CASCADE;
 CREATE TABLE "patient" (
   "patient_id" 			    INTEGER generated ALWAYS as IDENTITY PRIMARY KEY,
   "client_fk" 			    INTEGER 		    NOT NULL REFERENCES "client"(client_id),
-  "user_fk" 			      INTEGER 		    NOT NULL REFERENCES "user"(user_id),
+  "user_fk" 			    INTEGER 		    NOT NULL REFERENCES "user"(user_id),
   "company_fk" 			    INTEGER 		    NOT NULL REFERENCES company(company_id),
-  "name" 				        VARCHAR(100) 	  NOT NULL,
+  "name" 				    VARCHAR(100) 	    NOT NULL,
   "healthcare_provider" VARCHAR(100),
   "gender" 				      gender_options 	NOT NULL,
   "age" 				        SMALLINT,
