@@ -134,13 +134,12 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION protect_usertype() 
 RETURNS TRIGGER AS $$
 BEGIN
-    IF OLD.UserType IS DISTINCT FROM NEW.UserType THEN
-        RAISE EXCEPTION 'UserType cannot be modified';
+    IF OLD.user_type IS DISTINCT FROM NEW.user_type THEN
+        RAISE EXCEPTION 'user_type cannot be modified';
     END IF;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 
 --########################################################################################################
 -- TRIGGERS ##############################################################################################

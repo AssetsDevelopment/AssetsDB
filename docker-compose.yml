@@ -1,84 +1,38 @@
-# version: '3'
-
-# services:
-#   db:
-#     container_name: assets-db-dev
-#     build:
-#         context: .
-#         dockerfile: Dockerfile
-#     restart: always
-#     ports:
-#       - ${PORT}:${PORT}
-#     environment:
-#         POSTGRES_USER: ${POSTGRES_USER}    
-#         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}            
-#         POSTGRES_DB: ${POSTGRES_DB}  
-#     volumes:
-#         - postgres-db:/var/lib/postgresql/data
-      
-#   pdAdmin:
-#     image: dpage/pgadmin4
-#     container_name: pgadmin4
-#     restart: always
-#     depends_on:
-#       - db
-#     ports:
-#       - 8080:80
-#     environment:
-#       - PGADMIN_DEFAULT_EMAIL=root@google.com
-#       - PGADMIN_DEFAULT_PASSWORD=12345
-#     volumes:
-#       - ./pgadmin:/var/lib/pgadmin
-#       - ./pgadmin:/certs/server.cert
-#       - ./pgadmin:/certs/server.key
-#       - ./pgadmin:/pgadmin4/servers.json
-
-# volumes:
-#     postgres-db:
-#         external: 
 version: '3'
 
 services:
-
-    front:
-        container_name: assets-front-dev
-        image: nachodocker1714/assets-front:${FRONT_VERSION}
-        restart: always
-        depends_on:
-            - db
-            - app
-        ports:
-            - ${PORT_FRONT}:${PORT_FRONT}
-        environment:
-            VITE_API_REST_URL: ${VITE_API_REST_URL}
-
-    app:
-        container_name: assets-api-dev
-        image: nachodocker1714/assets-api:${APP_VERSION}
-        restart: always
-        depends_on:
-            - db
-        ports:
-            - ${PORT}:${PORT}
-        environment:
-            DATABASE_URL: ${DATABASE_URL}
-            PORT: ${PORT}
-            CLIENT_DOMAIN: ${CLIENT_DOMAIN}
-            JWT_SECRET: ${JWT_SECRET}
-
-    db:
-        container_name: assets-db-dev
-        image: nachodocker1714/assets-db:${DB_VERSION}
-        restart: always
-        ports:
-            - ${PORT_DB}:${PORT_DB}
-        volumes:
-            - postgres-db:/var/lib/postgresql/data
-        environment:
-            POSTGRES_USER: ${POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-            POSTGRES_DB: ${POSTGRES_DB}
+  db:
+    container_name: assets-db-dev
+    build:
+        context: .
+        dockerfile: Dockerfile
+    restart: always
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+        POSTGRES_USER: ${POSTGRES_USER}    
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}            
+        POSTGRES_DB: ${POSTGRES_DB}  
+    volumes:
+        - postgres-db:/var/lib/postgresql/data
+      
+  pdAdmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8080:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=root@google.com
+      - PGADMIN_DEFAULT_PASSWORD=12345
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+      - ./pgadmin:/certs/server.cert
+      - ./pgadmin:/certs/server.key
+      - ./pgadmin:/pgadmin4/servers.json
 
 volumes:
-    postgres-db: 
-       external: false
+    postgres-db:
+        external: 
