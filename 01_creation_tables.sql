@@ -31,8 +31,8 @@ CREATE TABLE "client" (
     "name" 		    VARCHAR(100) 	                  NOT NULL,
   "is_active" 	    BOOLEAN 		                  NOT NULL DEFAULT true,
   "user_type"       CHAR(6)                           NOT NULL DEFAULT 'client',
-  "created_at" 	    TIMESTAMP 		                  NOT NULL DEFAULT 'now()',
-  "updated_at" 	    TIMESTAMP 		                  NOT NULL DEFAULT 'now()'
+  "created_at" 	    TIMESTAMP 		                  NOT NULL DEFAULT now(),
+  "updated_at" 	    TIMESTAMP 		                  NOT NULL DEFAULT now()
 );
 -----------------------------------------------------------------------------------------------
 -- USER
@@ -46,9 +46,8 @@ CREATE TABLE "user" (
   "password" 	  VARCHAR(255) 	NOT NULL,
   "is_admin" 	  BOOLEAN 		  NOT NULL DEFAULT false,
   "is_active" 	BOOLEAN 		  NOT NULL DEFAULT true,
-  "created_at" 	TIMESTAMP 		NOT NULL DEFAULT 'now()',
-  "updated_at" 	TIMESTAMP 		NOT NULL DEFAULT 'now()'
-
+  "created_at" 	TIMESTAMP 		NOT NULL DEFAULT now(),
+  "updated_at" 	TIMESTAMP 		NOT NULL DEFAULT now()
 );
 -----------------------------------------------------------------------------------------------
 -- SCREEN
@@ -58,8 +57,8 @@ CREATE TABLE "screen" (
   "screen_id" 	INTEGER generated ALWAYS as IDENTITY PRIMARY KEY,
   "name" 		    VARCHAR(100) 	NOT NULL,
   "is_active" 	BOOLEAN 		  NOT NULL DEFAULT true,
-  "created_at" 	TIMESTAMP 		NOT NULL DEFAULT 'now()',
-  "updated_at" 	TIMESTAMP 		NOT NULL DEFAULT 'now()'
+  "created_at" 	TIMESTAMP 		NOT NULL DEFAULT now(),
+  "updated_at" 	TIMESTAMP 		NOT NULL DEFAULT now()
 );
 -----------------------------------------------------------------------------------------------
 -- PERMISSION
@@ -69,8 +68,8 @@ CREATE TABLE "permission" (
   "user_fk" 	  INTEGER 	  NOT NULL REFERENCES "user"(user_id),
   "client_fk" 	INTEGER 	  NOT NULL REFERENCES "client"(client_id),
   "screen_fk" 	INTEGER 	  NOT NULL REFERENCES screen(screen_id),
-  "created_at" 	TIMESTAMP 	NOT NULL DEFAULT 'now()',
-  "updated_at" 	TIMESTAMP 	NOT NULL DEFAULT 'now()',
+  "created_at" 	TIMESTAMP 	NOT NULL DEFAULT now(),
+  "updated_at" 	TIMESTAMP 	NOT NULL DEFAULT now(),
 
   PRIMARY KEY ("user_fk", "screen_fk")
 );
@@ -95,8 +94,8 @@ CREATE TABLE "professional" (
   "alias"           VARCHAR(50),
   "note" 		    TEXT,
   "user_type"       CHAR(12)                        NOT NULL DEFAULT 'professional',
-  "created_at" 	    TIMESTAMP 	                    NOT NULL DEFAULT 'now()',
-  "updated_at" 	    TIMESTAMP 	                    NOT NULL DEFAULT 'now()'
+  "created_at" 	    TIMESTAMP 	                    NOT NULL DEFAULT now(),
+  "updated_at" 	    TIMESTAMP 	                    NOT NULL DEFAULT now()
   
   -- Verifica que el registro tenga al menos el phone o el email
   CHECK (email IS NOT NULL OR phone IS NOT NULL)
@@ -125,8 +124,8 @@ CREATE TABLE "work_invitation" (
   "professional_fk" INTEGER         NOT NULL REFERENCES "professional"(professional_id),
   "sender"          profile_options NOT NULL,     
   "is_accept"       BOOLEAN         NOT NULL DEFAULT false,
-  "created_at"      TIMESTAMP       NOT NULL DEFAULT 'now()',
-  "updated_at" 	    TIMESTAMP 	    NOT NULL DEFAULT 'now()',
+  "created_at"      TIMESTAMP       NOT NULL DEFAULT now(),
+  "updated_at" 	    TIMESTAMP 	    NOT NULL DEFAULT now(),
 
   PRIMARY KEY ("client_fk", "professional_fk")
 );
@@ -138,8 +137,8 @@ CREATE TABLE "client_has_professional" (
   "client_fk"       INTEGER         NOT NULL,
   "professional_fk" INTEGER         NOT NULL,
   "is_active"       BOOLEAN         NOT NULL DEFAULT true,
-  "created_at"      TIMESTAMP       NOT NULL DEFAULT 'now()',
-  "updated_at" 	    TIMESTAMP 	    NOT NULL DEFAULT 'now()',
+  "created_at"      TIMESTAMP       NOT NULL DEFAULT now(),
+  "updated_at" 	    TIMESTAMP 	    NOT NULL DEFAULT now(),
 
   CONSTRAINT "client_has_professional_fkey" FOREIGN KEY ("client_fk", "professional_fk") REFERENCES "work_invitation"("client_fk", "professional_fk"),
 
@@ -157,8 +156,8 @@ CREATE TABLE "company" (
   "cuit" 		VARCHAR(20),
   "note" 		TEXT,
   "is_active" 	BOOLEAN 		  NOT NULL DEFAULT true,
-  "created_at" 	TIMESTAMP 		  NOT NULL DEFAULT 'now()',
-  "updated_at" 	TIMESTAMP 		  NOT NULL DEFAULT 'now()'
+  "created_at" 	TIMESTAMP 		  NOT NULL DEFAULT now(),
+  "updated_at" 	TIMESTAMP 		  NOT NULL DEFAULT now()
 
 );
 -----------------------------------------------------------------------------------------------
@@ -177,8 +176,8 @@ CREATE TABLE "patient" (
   "phone" 				      VARCHAR(30),
   "note" 				        TEXT,
   "is_active" 			    BOOLEAN 		    NOT NULL DEFAULT true,
-  "created_at" 			    TIMESTAMP 		  NOT NULL DEFAULT 'now()',
-  "updated_at" 			    TIMESTAMP 		  NOT NULL DEFAULT 'now()',
+  "created_at" 			    TIMESTAMP 		  NOT NULL DEFAULT now(),
+  "updated_at" 			    TIMESTAMP 		  NOT NULL DEFAULT now(),
 
   CHECK(age >= 0 AND age <= 85),
 
@@ -207,8 +206,8 @@ CREATE TABLE "treatment" (
   "abbreviation" 	VARCHAR(10) 	NOT NULL,
   "description" 	TEXT,
   "is_active" 		BOOLEAN 		  NOT NULL DEFAULT true,
-  "created_at" 		TIMESTAMP 		NOT NULL DEFAULT 'now()',
-  "updated_at" 		TIMESTAMP 		NOT NULL DEFAULT 'now()'
+  "created_at" 		TIMESTAMP 		NOT NULL DEFAULT now(),
+  "updated_at" 		TIMESTAMP 		NOT NULL DEFAULT now()
 
 );
 -----------------------------------------------------------------------------------------------
@@ -221,8 +220,8 @@ CREATE TABLE "company_has_treatment" (
   "company_fk" 		INTEGER 		  NOT NULL REFERENCES company(company_id),
   "treatment_fk" 	INTEGER 		  NOT NULL REFERENCES treatment(treatment_id),
   "value" 			  DECIMAL(7,2) 	NOT NULL,
-  "created_at" 	  TIMESTAMP 		NOT NULL DEFAULT 'now()',
-  "updated_at" 	  TIMESTAMP 		NOT NULL DEFAULT 'now()',
+  "created_at" 	  TIMESTAMP 		NOT NULL DEFAULT now(),
+  "updated_at" 	  TIMESTAMP 		NOT NULL DEFAULT now(),
 
   PRIMARY KEY ("company_fk", "treatment_fk"),
     
@@ -239,8 +238,8 @@ CREATE TABLE "treatment_has_professional" (
   "treatment_fk" 	  INTEGER 		  NOT NULL REFERENCES treatment(treatment_id),
   "professional_fk" INTEGER 		  NOT NULL,
   "value" 			    DECIMAL(7,2) 	NOT NULL,
-  "created_at" 	    TIMESTAMP 		NOT NULL DEFAULT 'now()',
-  "updated_at" 	    TIMESTAMP 		NOT NULL DEFAULT 'now()',
+  "created_at" 	    TIMESTAMP 		NOT NULL DEFAULT now(),
+  "updated_at" 	    TIMESTAMP 		NOT NULL DEFAULT now(),
 
   -- profesional_fkey es una FK compuesta
   CONSTRAINT "treatment_has_professional_professional_fkey" FOREIGN KEY ("client_fk", "professional_fk") REFERENCES "client_has_professional"("client_fk", "professional_fk"),
@@ -274,8 +273,8 @@ CREATE TABLE "order" (
   "diagnosis" 			  TEXT,
   "requirements" 		  VARCHAR(300),
   "is_active" 		    BOOLEAN       NOT NULL  DEFAULT true,
-  "created_at" 			  TIMESTAMP 	  NOT NULL  DEFAULT 'now()',
-  "updated_at" 			  TIMESTAMP 	  NOT NULL  DEFAULT 'now()',
+  "created_at" 			  TIMESTAMP 	  NOT NULL  DEFAULT now(),
+  "updated_at" 			  TIMESTAMP 	  NOT NULL  DEFAULT now(),
     
   -- profesional_fkey es una FK compuesta
   CONSTRAINT "order_professional_fkey" FOREIGN KEY ("client_fk", "professional_fk") REFERENCES "client_has_professional"("client_fk", "professional_fk"),
@@ -313,8 +312,8 @@ CREATE TABLE "claim" (
   "urgency"       urgency_options NOT NULL,
   "reported_date" TIMESTAMP 		  NOT NULL,
   "is_active" 		BOOLEAN 		    NOT NULL DEFAULT true,
-  "created_at" 		TIMESTAMP 		  NOT NULL DEFAULT 'now()',
-  "updated_at" 		TIMESTAMP 		  NOT NULL DEFAULT 'now()',
+  "created_at" 		TIMESTAMP 		  NOT NULL DEFAULT now(),
+  "updated_at" 		TIMESTAMP 		  NOT NULL DEFAULT now(),
 
   CHECK (reported_date >= CURRENT_DATE - INTERVAL '31 days')
 );
