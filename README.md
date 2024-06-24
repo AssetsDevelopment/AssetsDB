@@ -42,6 +42,7 @@ La tabla "client" tiene la siguiente estructura:
 |---------------|-------------------|----------------------------|
 | `client_id`   | **PRIMARY KEY**   |                            |
 | `name`        | **VARCHAR(100)**  | NOT NULL                   |
+| `user_type`   | **CHAR(6)**       | NOT NULL DEFAULT 'client'  |
 | `is_active`   | **BOOLEAN**       | NOT NULL DEFAULT TRUE      |
 | `created_at`  | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'   |
 | `updated_at`  | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'   |
@@ -54,6 +55,7 @@ Esta tabla actúa como el núcleo fundamental de la base de datos, ya que posibi
 ### Validaciones (TRIGGER)
 | Campo               | Disparador                | Descripción                                         |
 |---------------------|---------------------------|-----------------------------------------------------|
+| `user_type`         | **[U]**                   | Valida que el valor no pueda ser modificado.        |
 | `created_at`        | **[U]**                   | Valida que el valor no pueda ser modificado.        |
 | `updated_at`        | **[U]**                   | Actualiza el valor automaticamente.                 |
 
@@ -181,6 +183,7 @@ La tabla "professional" tiene la siguiente estructura:
 | `cbu`             | **VARCHAR(23)**     |                                   |
 | `alias`           | **VARCHAR(50)**     |                                   |
 | `note`            | **TEXT**            |                                   |
+| `user_type`       | **CHAR(12)**        | NOT NULL DEFAULT 'professional'   |
 | `created_at`      | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'          |
 | `updated_at`      | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'          |
 

@@ -30,7 +30,7 @@ CREATE TABLE "client" (
   "client_id" 	    INTEGER generated ALWAYS as IDENTITY PRIMARY KEY,
     "name" 		    VARCHAR(100) 	                  NOT NULL,
   "is_active" 	    BOOLEAN 		                  NOT NULL DEFAULT true,
-  "user_type"       CHAR(9)                           NOT NULL DEFAULT 'client',
+  "user_type"       CHAR(6)                           NOT NULL DEFAULT 'client',
   "created_at" 	    TIMESTAMP 		                  NOT NULL DEFAULT 'now()',
   "updated_at" 	    TIMESTAMP 		                  NOT NULL DEFAULT 'now()'
 );
@@ -94,7 +94,7 @@ CREATE TABLE "professional" (
   "cbu" 		    VARCHAR(23),
   "alias"           VARCHAR(50),
   "note" 		    TEXT,
-  "user_type"       CHAR(9)                         NOT NULL DEFAULT 'professional',
+  "user_type"       CHAR(12)                        NOT NULL DEFAULT 'professional',
   "created_at" 	    TIMESTAMP 	                    NOT NULL DEFAULT 'now()',
   "updated_at" 	    TIMESTAMP 	                    NOT NULL DEFAULT 'now()'
   
