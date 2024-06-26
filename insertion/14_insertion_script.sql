@@ -1,18 +1,18 @@
 -----------------------------------------------------------------------------------------------
 -- CLIENT
 -----------------------------------------------------------------------------------------------
-INSERT INTO "client" ("name")
+INSERT INTO "client" ("name", "last_name")
 VALUES 
-  ('Julio');
+  ('Julio', 'Barros');
 -----------------------------------------------------------------------------------------------
 -- USER
 -----------------------------------------------------------------------------------------------
-INSERT INTO "user" ("client_fk", "name", "email", "password", "is_admin")
+INSERT INTO "user" ("client_fk", "name", "last_name", "email", "password", "is_admin")
 VALUES 
-  (1, 'user1', 'user1@gmail.com', 'pppppppp', true),
-  (1, 'user2', 'user2@gmail.com', 'pppppppp', false),
-  (1, 'user3', 'user3@gmail.com', 'pppppppp', false),
-  (1, 'user4', 'user4@gmail.com', 'pppppppp', false);
+  (1, 'user1', 'apellido', 'user1@gmail.com', 'pppppppp', true),
+  (1, 'user2', 'apellido', 'user2@gmail.com', 'pppppppp', false),
+  (1, 'user3', 'apellido', 'user3@gmail.com', 'pppppppp', false),
+  (1, 'user4', 'apellido', 'user4@gmail.com', 'pppppppp', false);
 -----------------------------------------------------------------------------------------------
 -- SCREEN
 -----------------------------------------------------------------------------------------------
