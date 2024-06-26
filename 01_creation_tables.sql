@@ -31,7 +31,6 @@ CREATE TABLE "client" (
   "name" 		    VARCHAR(100) 	                  NOT NULL,
   "last_name" 		VARCHAR(100)                      NOT NULL,
   "is_active" 	    BOOLEAN 		                  NOT NULL DEFAULT true,
-  "user_type"       CHAR(6)                           NOT NULL DEFAULT 'client',
   "created_at" 	    TIMESTAMP 		                  NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" 	    TIMESTAMP 		                  NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -95,7 +94,6 @@ CREATE TABLE "professional" (
   "cbu" 		    VARCHAR(23),
   "alias"           VARCHAR(50),
   "note" 		    TEXT,
-  "user_type"       CHAR(12)                        NOT NULL DEFAULT 'professional',
   "created_at" 	    TIMESTAMP 	                    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" 	    TIMESTAMP 	                    NOT NULL DEFAULT CURRENT_TIMESTAMP
   
