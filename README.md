@@ -42,7 +42,7 @@ La tabla "client" tiene la siguiente estructura:
 |---------------|-------------------|----------------------------|
 | `client_id`   | **PRIMARY KEY**   |                            |
 | `name`        | **VARCHAR(100)**  | NOT NULL                   |
-| `user_type`   | **CHAR(6)**       | NOT NULL DEFAULT 'client'  |
+| `last_name`   | **VARCHAR(100)**  | NOT NULL                   |
 | `is_active`   | **BOOLEAN**       | NOT NULL DEFAULT TRUE      |
 | `created_at`  | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'   |
 | `updated_at`  | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'   |
@@ -55,7 +55,6 @@ Esta tabla actúa como el núcleo fundamental de la base de datos, ya que posibi
 ### Validaciones (TRIGGER)
 | Campo               | Disparador                | Descripción                                         |
 |---------------------|---------------------------|-----------------------------------------------------|
-| `user_type`         | **[U]**                   | Valida que el valor no pueda ser modificado.        |
 | `created_at`        | **[U]**                   | Valida que el valor no pueda ser modificado.        |
 | `updated_at`        | **[U]**                   | Actualiza el valor automaticamente.                 |
 
@@ -75,6 +74,7 @@ La tabla "user" tiene la siguiente estructura:
 | `user_id`    | **INTEGER**       |                                            |
 | `client_fk`  | **FOREIGN KEY**   | NOT NULL REFERENCES "client"(client_id)    |
 | `name`       | **VARCHAR(100)**  | NOT NULL                                   |
+| `last_name`  | **VARCHAR(100)**  | NOT NULL                                   |
 | `email`      | **VARCHAR(255)**  | NOT NULL UNIQUE                            |
 | `password`   | **VARCHAR(255)**  | NOT NULL                                   |
 | `is_admin`   | **BOOLEAN**       | NOT NULL DEFAULT FALSE                     |
@@ -183,7 +183,6 @@ La tabla "professional" tiene la siguiente estructura:
 | `cbu`             | **VARCHAR(23)**     |                                   |
 | `alias`           | **VARCHAR(50)**     |                                   |
 | `note`            | **TEXT**            |                                   |
-| `user_type`       | **CHAR(12)**        | NOT NULL DEFAULT 'professional'   |
 | `created_at`      | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'          |
 | `updated_at`      | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'          |
 
