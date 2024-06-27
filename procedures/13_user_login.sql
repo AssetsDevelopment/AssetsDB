@@ -14,7 +14,7 @@ BEGIN
 
     RETURN was_found;
 END;
-$function$
+$function$;
 
 CREATE OR REPLACE FUNCTION public.professional_login(professional_email character varying, professional_password character varying)
  RETURNS integer
@@ -32,7 +32,7 @@ BEGIN
 
     RETURN was_found;
 END;
-$function$
+$function$;
 
 
 -- SELECT user_login('baig', '43721804');
