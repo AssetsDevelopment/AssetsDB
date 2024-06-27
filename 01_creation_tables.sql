@@ -94,6 +94,7 @@ CREATE TABLE "professional" (
   "cbu" 		    VARCHAR(23),
   "alias"           VARCHAR(50),
   "note" 		    TEXT,
+  "is_active"       BOOLEAN 		                NOT NULL DEFAULT true,
   "created_at" 	    TIMESTAMP 	                    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updated_at" 	    TIMESTAMP 	                    NOT NULL DEFAULT CURRENT_TIMESTAMP
   
