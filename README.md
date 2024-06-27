@@ -183,6 +183,7 @@ La tabla "professional" tiene la siguiente estructura:
 | `cbu`             | **VARCHAR(23)**     |                                   |
 | `alias`           | **VARCHAR(50)**     |                                   |
 | `note`            | **TEXT**            |                                   |
+| `is_active`       | **BOOLEAN**         | NOT NULL DEFAULT TRUE                |
 | `created_at`      | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'          |
 | `updated_at`      | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'          |
 
