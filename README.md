@@ -79,6 +79,7 @@ La tabla "user" tiene la siguiente estructura:
 | `password`   | **VARCHAR(255)**  | NOT NULL                                   |
 | `is_admin`   | **BOOLEAN**       | NOT NULL DEFAULT FALSE                     |
 | `is_active`  | **BOOLEAN**       | NOT NULL DEFAULT TRUE                      |
+| `user_type`  | **CHAR(6)**       | NOT NULL DEFAULT 'client'                  |
 | `created_at` | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'                   |
 | `updated_at` | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'                   |
 
@@ -94,6 +95,7 @@ Esta tabla facilita la gestión y autenticación de los usuarios que interactúa
 | `password`          | **[I][U][<>][password]**  | Valida que el valor >= 8 y luego lo hashea.                                                            |
 | `is_admin`          | **[I][U][<>][is_admin]**  | Valida que exista un solo usuario administrador por cliente.                                           |
 | `client.is_active`  | **[I][U]**                | Valida que el cliente referenciado este activo.                                                        |
+| `user_type`         | **[U]**                   | Valida que el valor no pueda ser modificado.                                                           |
 | `created_at`        | **[U]**                   | Valida que el valor no pueda ser modificado.                                                           |
 | `updated_at`        | **[U]**                   | Actualiza el valor automaticamente.                                                                    |
 
@@ -183,7 +185,8 @@ La tabla "professional" tiene la siguiente estructura:
 | `cbu`             | **VARCHAR(23)**     |                                   |
 | `alias`           | **VARCHAR(50)**     |                                   |
 | `note`            | **TEXT**            |                                   |
-| `is_active`       | **BOOLEAN**         | NOT NULL DEFAULT TRUE                |
+| `user_type`       | **CHAR(12)**        | NOT NULL DEFAULT 'professional'   |
+| `is_active`       | **BOOLEAN**         | NOT NULL DEFAULT TRUE             |
 | `created_at`      | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'          |
 | `updated_at`      | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'          |
 
@@ -210,6 +213,7 @@ Su función principal es gestionar la información detallada de los profesionale
 |---------------------|---------------------------|--------------------------------------------------------------------------------------------------------|
 | `email`             | **[I][U][<>][email]**     | Valida contra una "regex" que el valor tenga un formato correcto y pertenezca a un dominio reconocido. |
 | `password`          | **[I][U][<>][password]**  | Valida que el valor >= 8 y luego lo hashea.                                                            |
+| `user_type`         | **[U]**                   | Valida que el valor no pueda ser modificado.                                                           |
 | `created_at`        | **[U]**                   | Valida que el valor no pueda ser modificado.                                                           |
 | `updated_at`        | **[U]**                   | Actualiza el valor automaticamente.                                                                    |
 

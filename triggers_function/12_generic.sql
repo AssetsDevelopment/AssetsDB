@@ -129,6 +129,17 @@ CREATE OR REPLACE FUNCTION process_professional_assignment_change()
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
+----------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION protect_usertype() 
+RETURNS TRIGGER AS $$
+BEGIN
+    IF OLD.user_type IS DISTINCT FROM NEW.user_type THEN
+        RAISE EXCEPTION 'user_type cannot be modified';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
 --########################################################################################################
 -- TRIGGERS ##############################################################################################
@@ -160,3 +171,17 @@ AFTER UPDATE OF is_accept ON work_invitation
 FOR EACH ROW
 WHEN (NEW.is_accept <> OLD.is_accept)
 EXECUTE FUNCTION process_professional_assignment_change();
+----------------------------------------------------------------------------------------------------------
+-- user --------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
+CREATE TRIGGER trg_protect_usertype_client
+BEFORE UPDATE ON "user"
+FOR EACH ROW
+EXECUTE FUNCTION protect_usertype();
+----------------------------------------------------------------------------------------------------------
+-- professional ------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
+CREATE TRIGGER trg_protect_usertype_client
+BEFORE UPDATE ON professional
+FOR EACH ROW
+EXECUTE FUNCTION protect_usertype();
