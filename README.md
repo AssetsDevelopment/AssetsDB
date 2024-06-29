@@ -33,6 +33,92 @@ Este enfoque es eficiente en términos de gestión y mantenimiento, ya que solo 
 
 # Estructura de la Base de Datos
 
+## Tabla "user"
+
+### Estructura
+La tabla "user" tiene la siguiente estructura:
+
+| Columna      | Tipo              | Restricciones                              |
+|--------------|-------------------|--------------------------------------------|
+| `user_id`    | **PRIMARY KEY**   |                                            |
+| `profile`    | **VARCHAR(100)**  | NOT NULL UNIQUE                            |
+| `phone`      | **VARCHAR(30)**   |                                            |
+| `email`      | **VARCHAR(255)**  |                                            |
+| `password`   | **VARCHAR(255)**  | NOT NULL                                   |
+| `is_active`  | **BOOLEAN**       | NOT NULL DEFAULT TRUE                      |
+| `user_type`  | **VARCHAR(12)**   | NOT NULL DEFAULT TRUE                      |
+| `created_at` | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP         |
+| `updated_at` | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP         |
+
+### Descripción
+[COMPLETAR_DESCRIPCION]
+
+### Validaciones (TRIGGER)
+| Campo               | Disparador                | Descripción                                                                                            |
+|---------------------|---------------------------|--------------------------------------------------------------------------------------------------------|
+| `email`             | **[I][U][<>][email]**     | Valida contra una "regex" que el valor tenga un formato correcto y pertenezca a un dominio reconocido. |
+| `password`          | **[I][U][<>][password]**  | Valida que el valor >= 8 y luego lo hashea.                                                            |
+| `is_admin`          | **[I][U][<>][is_admin]**  | Valida que exista un solo usuario administrador por cliente.                                           |
+| `client.is_active`  | **[I][U]**                | Valida que el cliente referenciado este activo.                                                        |
+| `user_type`         | **[U]**                   | Valida que el valor no pueda ser modificado.                                                           |
+| `created_at`        | **[U]**                   | Valida que el valor no pueda ser modificado.                                                           |
+| `updated_at`        | **[U]**                   | Actualiza el valor automaticamente.                                                                    |
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Tabla "client"
 
 ### Estructura
@@ -44,8 +130,8 @@ La tabla "client" tiene la siguiente estructura:
 | `name`        | **VARCHAR(100)**  | NOT NULL                   |
 | `last_name`   | **VARCHAR(100)**  | NOT NULL                   |
 | `is_active`   | **BOOLEAN**       | NOT NULL DEFAULT TRUE      |
-| `created_at`  | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'   |
-| `updated_at`  | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'   |
+| `created_at`  | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TI|
+| `updated_at`  | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TI|
 
 ### Descripción
 La tabla "client" almacena información detallada sobre los coordinadores de interacción domiciliaria que tienen acceso a la dashboard. Cada registro en esta tabla representa un cliente (coordinador) y desempeña un papel central al ser el punto de conexión para vincular información relacionada en otras tablas.
@@ -80,8 +166,8 @@ La tabla "user" tiene la siguiente estructura:
 | `is_admin`   | **BOOLEAN**       | NOT NULL DEFAULT FALSE                     |
 | `is_active`  | **BOOLEAN**       | NOT NULL DEFAULT TRUE                      |
 | `user_type`  | **CHAR(6)**       | NOT NULL DEFAULT 'client'                  |
-| `created_at` | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'                   |
-| `updated_at` | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'                   |
+| `created_at` | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP         |
+| `updated_at` | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP         |
 
 ### Descripción
 La tabla "user" almacena información de los usuarios del sistema, como nombres, correos electrónicos, contraseñas, roles y estados de activación. Su función principal es gestionar y mantener registros de los usuarios.
@@ -111,8 +197,8 @@ La tabla "screen" tiene la siguiente estructura:
 | `screen_id`    | **PRIMARY KEY**   |                                      |
 | `name`         | **VARCHAR(100)**  | NOT NULL                             |
 | `is_active`    | **BOOLEAN**       | NOT NULL DEFAULT TRUE                |
-| `created_at`   | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'             |
-| `updated_at`   | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'             |
+| `created_at`   | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP   |
+| `updated_at`   | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP   |
 
 ### Descripción
 La tabla "screen" almacena información sobre las vistas de la dashboard. Cada registro en esta tabla representa una pantalla o vista, proporcionando control sobre su activación y asignación de permisos.
@@ -142,8 +228,8 @@ La tabla "permission" tiene la siguiente estructura:
 | `client_fk`     | **FOREIGN KEY**   | NOT NULL                                        |
 | `user_fk`       | **FOREIGN KEY**   | NOT NULL                                        |
 | `screen_fk`     | **FOREIGN KEY**   | NOT NULL REFERENCES screen(screen_id)           |
-| `created_at`    | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'                        |
-| `updated_at`    | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'                        |
+| `created_at`    | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP              |
+| `updated_at`    | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP              |
 
 ### Descripción
 La tabla pivot "permission" establece relaciones entre usuarios, vistas y clientes, definiendo qué usuarios tienen acceso a qué vistas en el contexto de un cliente específico.
@@ -187,8 +273,8 @@ La tabla "professional" tiene la siguiente estructura:
 | `note`            | **TEXT**            |                                   |
 | `user_type`       | **CHAR(12)**        | NOT NULL DEFAULT 'professional'   |
 | `is_active`       | **BOOLEAN**         | NOT NULL DEFAULT TRUE             |
-| `created_at`      | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'          |
-| `updated_at`      | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'          |
+| `created_at`      | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP|
+| `updated_at`      | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP|
 
 | Índice Único                                                            |
 |-------------------------------------------------------------------------|
@@ -234,8 +320,8 @@ La tabla "work_invitation" tiene la siguiente estructura
 | `professional_fk` | **FOREIGN KEY**     | NOT NULL REFERENCES "professional"(professional_id) |
 | `sender`          | **profile_options** | NOT NULL                                            |
 | `is_accept`       | **BOOLEAN**         | NOT NULL DEFAULT FALSE                              |
-| `created_at`      | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'                            |
-| `updated_at`      | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'                            |
+| `created_at`      | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP                  |
+| `updated_at`      | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP                  |
 
 ### Descripción
 La tabla pivot "work_invitation" gestiona las invitaciones entre clientes y profesionales, marcando el primer paso para la creación de una relación laboral. Cada registro en esta tabla representa una invitación enviada por un cliente a un profesional, y se indica si la invitación ha sido aceptada.
@@ -272,8 +358,8 @@ La tabla "client_has_professional" tiene la siguiente estructura
 | `client_fk`       | **FOREIGN KEY**     | NOT NULL                                                             |
 | `professional_fk` | **FOREIGN KEY**     | NOT NULL                                                             |
 | `is_accept`       | **BOOLEAN**         | NOT NULL DEFAULT FALSE                                               |
-| `created_at`      | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'                                             |
-| `updated_at`      | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'                                             |
+| `created_at`      | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP                                   |
+| `updated_at`      | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP                                   |
 
 ### Descripción
 La tabla "client_has_professional" juega un papel fundamental como vínculo entre clientes y profesionales, permitiendo la colaboración, asignación de pedidos y trabajo conjunto. Cada registro en esta tabla representa una relación establecida entre un cliente y un profesional, originada a partir de una invitación aceptada en "work_invitation".
@@ -308,8 +394,8 @@ La tabla "company" tiene la siguiente estructura:
 | `cuit`         | **VARCHAR(20)**   |                                                  |
 | `note`         | **TEXT**          |                                                  |
 | `is_active`    | **BOOLEAN**       | NOT NULL DEFAULT TRUE                            |
-| `created_at`   | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'                         |
-| `updated_at`   | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'                         |
+| `created_at`   | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP               |
+| `updated_at`   | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP               |
 
 ### Descripción
 La tabla "company" registra las empresas asociadas a un cliente específico y permite distinguir qué usuario las creó. Estos registros representan "clientes de mis clientes", siendo un vínculo entre el coordinador que terceriza los pedidos de las empresas. En esta relación, cada coordinador puede establecer sus propias empresas, incluso si se repiten entre coordinadores.
@@ -348,8 +434,8 @@ La tabla "patient" tiene la siguiente estructura:
 | `phone`              | **VARCHAR(30)**       |                                            |
 | `note`               | **TEXT**              |                                            |
 | `is_active`          | **BOOLEAN**           | NOT NULL DEFAULT TRUE                      |
-| `created_at`         | **TIMESTAMP**         | NOT NULL DEFAULT 'now()'                   |
-| `updated_at`         | **TIMESTAMP**         | NOT NULL DEFAULT 'now()'                   |
+| `created_at`         | **TIMESTAMP**         | NOT NULL DEFAULT CURRENT_TIMESTAMP         |
+| `updated_at`         | **TIMESTAMP**         | NOT NULL DEFAULT CURRENT_TIMESTAMP         |
 
 ### Descripción
 La tabla "patient" almacena información detallada sobre los pacientes asociados a una empresa específica. Cada registro en esta tabla representa un paciente y está vinculado a un usuario y cliente particular. Se destaca que los pedidos se generan a partir de los pacientes, lo que facilita la distinción y seguimiento de los pacientes y sus pedidos asociados.
@@ -391,8 +477,8 @@ La tabla "treatment" tiene la siguiente estructura:
 | `abbreviation`  | **VARCHAR(10)**   | NOT NULL                                       |
 | `description`   | **TEXT**          |                                                |
 | `is_active`     | **BOOLEAN**       | NOT NULL DEFAULT TRUE                          |
-| `created_at`    | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'                       |
-| `updated_at`    | **TIMESTAMP**     | NOT NULL DEFAULT 'now()'                       |
+| `created_at`    | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP             |
+| `updated_at`    | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP             |
 
 ### Descripción
 La tabla "treatment" se utiliza para distinguir las prestaciones con las que trabaja o cubre un coordinador. Cada registro en esta tabla representa una prestación y está vinculado a un usuario y cliente específico. Importante destacar que no importa si se repiten los registros entre clientes, ya que cada uno es libre de crear las prestaciones que desee.
@@ -426,8 +512,8 @@ La tabla "company_has_treatment" tiene la siguiente estructura:
 | `company_fk`      | **FOREIGN KEY**        | NOT NULL                                 |
 | `treatment_fk`    | **FOREIGN KEY**        | NOT NULL                                 |
 | `value`           | **DECIMAL(7,2)**       | NOT NULL                                 |
-| `created_at`      | **TIMESTAMP**          | NOT NULL DEFAULT 'now()'                 |
-| `updated_at`      | **TIMESTAMP**          | NOT NULL DEFAULT 'now()'                 |
+| `created_at`      | **TIMESTAMP**          | NOT NULL DEFAULT CURRENT_TIMESTAMP       |
+| `updated_at`      | **TIMESTAMP**          | NOT NULL DEFAULT CURRENT_TIMESTAMP       |
 
 ### Descripción
 La tabla "company_has_treatment" controla la relación financiera entre una empresa específica (asociada a un coordinador) y una prestación en particular. Cada registro en esta tabla indica cuánto le paga la empresa al cliente (coordinador) por una prestación específica y registra quién fue el usuario que creó esta relación financiera.
@@ -470,8 +556,8 @@ La tabla "treatment_has_professional" tiene la siguiente estructura:
 | `company_fk`      | **FOREIGN KEY**         | NOT NULL REFERENCES company(company_id)                                   |
 | `treatment_fk`    | **FOREIGN KEY**         | NOT NULL REFERENCES treatment(treatment_id)                               |
 | `value`           | **DECIMAL(7,2)**        | NOT NULL                                                                  |
-| `created_at`      | **TIMESTAMP**           | NOT NULL DEFAULT 'now()'                                                  |
-| `updated_at`      | **TIMESTAMP**           | NOT NULL DEFAULT 'now()'                                                  |
+| `created_at`      | **TIMESTAMP**           | NOT NULL DEFAULT CURRENT_TIMESTAMP                                        |
+| `updated_at`      | **TIMESTAMP**           | NOT NULL DEFAULT CURRENT_TIMESTAMP                                        |
 
 ### Descripción
 La tabla "treatment_has_professional" controla los costos que un coordinador (cliente) paga a cada profesional por una empresa y una prestación específica. Cada registro en esta tabla refleja la tarifa acordada entre el coordinador y el profesional por una determinada prestación y empresa, y también se almacena información sobre quién fue el usuario que estableció esta tarifa.
@@ -527,8 +613,8 @@ La tabla "order" tiene la siguiente estructura:
 | `diagnosis`         | **TEXT**            |                                                                             |
 | `requirements`      | **VARCHAR(300)**    |                                                                             |
 |  `is_active`        | **BOOLEAN**         | NOT NULL DEFAULT TRUE                                                       |
-| `created_at`        | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'                                                    |
-| `updated_at`        | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'                                                    |
+| `created_at`        | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP                                          |
+| `updated_at`        | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP                                          |
 
 ### Descripción
 La tabla "order" registra los pedidos gestionados por un coordinador. Cada registro en esta tabla representa un pedido específico, distinguiendo entre "nuevo", "renovación" o "finalizado". Se asocia a un paciente, una prestación y, en caso de ser aplicable, a un profesional asignado. Además, se almacena información detallada sobre las fechas, sesiones, costos y requisitos relacionados con cada pedido.
@@ -580,8 +666,8 @@ La tabla "claim" tiene la siguiente estructura:
 | `urgency`       | **urgency_options** | NOT NULL                                        |
 | `reported_date` | **TIMESTAMP**       | NOT NULL                                        |
 | `is_active`     | **BOOLEAN**         | NOT NULL DEFAULT TRUE                           |
-| `created_at`    | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'                        |
-| `updated_at`    | **TIMESTAMP**       | NOT NULL DEFAULT 'now()'                        |
+| `created_at`    | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP              |
+| `updated_at`    | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP              |
 
 ### Descripción
 La tabla "claim" controla los reclamos asociados a un pedido específico de un cliente. Cada registro en esta tabla representa un reclamo registrado por un usuario en relación con un pedido específico. Se registra la causa del reclamo, la urgencia, la fecha de reporte y se identifica quién fue el usuario que registró el reclamo.
