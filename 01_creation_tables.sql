@@ -31,12 +31,12 @@ CREATE TYPE "urgency_options" AS ENUM (
 DROP TABLE IF EXISTS "user" CASCADE;
 CREATE TABLE "user" (
     "user_id"       INTEGER generated ALWAYS as IDENTITY PRIMARY KEY,
-    "profile"       VARCHAR(100) 	NOT NULL,
+    "profile"       VARCHAR(100) 	NOT NULL UNIQUE,
     "phone"         VARCHAR(30),         
     "email" 		VARCHAR(255),       
     "password"      VARCHAR(255) 	NOT NULL,
     "is_active"     BOOLEAN 		NOT NULL DEFAULT true,
-    "user_type"     CHAR(6)         NOT NULL DEFAULT 'client',
+    "user_type"     VARCHAR(12)     NOT NULL,
     "created_at"    TIMESTAMP 		NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" 	TIMESTAMP 		NOT NULL DEFAULT CURRENT_TIMESTAMP
 
@@ -44,7 +44,7 @@ CREATE TABLE "user" (
     CHECK (email IS NOT NULL OR phone IS NOT NULL)
     -- Valida formato
     CHECK (email <> '')
-    CHECK (phone ~ '^(?:(?:00)?549?)?0?(?:11|[2368]\d)(?:(?=\d{0,2}15)\d{2})??\d{8}$' OR phone IS NULL)
+    -- CHECK (phone ~ '^(?:(?:00)?549?)?0?(?:11|[2368]\d)(?:(?=\d{0,2}15)\d{2})??\d{8}$' OR phone IS NULL)
 );
 
 DROP INDEX IF EXISTS unique_email_exclude_empty;
@@ -60,7 +60,7 @@ CREATE UNIQUE INDEX unique_phone_exclude_empty ON "user" ((CASE WHEN phone IS NO
 DROP TABLE IF EXISTS "client" CASCADE;
 CREATE TABLE "client" (
     "client_id"     INTEGER generated ALWAYS as IDENTITY PRIMARY KEY,
-    "client_fk"     INTEGER         NOT NULL REFERENCES "client"(client_id),
+    "client_fk"     INTEGER         REFERENCES "client"(client_id),
     "user_fk"       INTEGER         NOT NULL REFERENCES "user"(user_id),
     "name"          VARCHAR(100)    NOT NULL,
     "last_name"     VARCHAR(100)    NOT NULL,
@@ -149,9 +149,9 @@ CREATE TABLE "patient" (
     "created_at"            TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at"            TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CHECK(age >= 0 AND age <= 85),
+    CHECK(age >= 0 AND age <= 85)
 
-    CHECK (phone ~ '^(?:(?:00)?549?)?0?(?:11|[2368]\d)(?:(?=\d{0,2}15)\d{2})??\d{8}$')
+    -- CHECK (phone ~ '^(?:(?:00)?549?)?0?(?:11|[2368]\d)(?:(?=\d{0,2}15)\d{2})??\d{8}$')
 
     /*
     Toma como opcionales:
