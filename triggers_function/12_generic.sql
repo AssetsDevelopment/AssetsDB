@@ -48,8 +48,8 @@ CREATE OR REPLACE FUNCTION check_admin_exists()
     BEGIN
         IF EXISTS (
             SELECT 1
-            FROM "user"
-            WHERE client_fk = NEW.client_fk AND is_admin = true
+            FROM "client"
+            WHERE client_id = NEW.client_fk AND is_admin = true
         ) AND NEW.is_admin = true THEN
             RAISE EXCEPTION 'Ya existe un usuario administrador para este cliente';
         END IF;
@@ -146,42 +146,35 @@ $$ LANGUAGE plpgsql;
 --########################################################################################################
 
 ----------------------------------------------------------------------------------------------------------
--- user --------------------------------------------------------------------------------------------------
+-- client --------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------
 CREATE TRIGGER trg_update_check_admin_exists
-BEFORE UPDATE ON "user"
+BEFORE UPDATE ON "client"
 FOR EACH ROW
 WHEN (NEW.is_admin <> OLD.is_admin)
 EXECUTE FUNCTION check_admin_exists();
 
 CREATE TRIGGER trg_insert_check_admin_exists
-BEFORE INSERT ON "user"
+BEFORE INSERT ON "client"
 FOR EACH ROW
 EXECUTE FUNCTION check_admin_exists();
 ----------------------------------------------------------------------------------------------------------
--- work_invitation ---------------------------------------------------------------------------------------
+-- client_has_professional ---------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------
-CREATE TRIGGER trg_prevent_true_insertion
-BEFORE INSERT ON work_invitation
-FOR EACH ROW
-EXECUTE FUNCTION prevent_true_insertion();
+-- CREATE TRIGGER trg_prevent_true_insertion
+-- BEFORE INSERT ON client_has_professional
+-- FOR EACH ROW
+-- EXECUTE FUNCTION prevent_true_insertion();
 
-CREATE TRIGGER trg_process_professional_assignment_change
-AFTER UPDATE OF is_accept ON work_invitation
-FOR EACH ROW
-WHEN (NEW.is_accept <> OLD.is_accept)
-EXECUTE FUNCTION process_professional_assignment_change();
+-- CREATE TRIGGER trg_process_professional_assignment_change
+-- AFTER UPDATE OF is_accept ON work_invitation
+-- FOR EACH ROW
+-- WHEN (NEW.is_accept <> OLD.is_accept)
+-- EXECUTE FUNCTION process_professional_assignment_change();
 ----------------------------------------------------------------------------------------------------------
 -- user --------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------
 CREATE TRIGGER trg_protect_usertype_client
 BEFORE UPDATE ON "user"
-FOR EACH ROW
-EXECUTE FUNCTION protect_usertype();
-----------------------------------------------------------------------------------------------------------
--- professional ------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------
-CREATE TRIGGER trg_protect_usertype_client
-BEFORE UPDATE ON professional
 FOR EACH ROW
 EXECUTE FUNCTION protect_usertype();

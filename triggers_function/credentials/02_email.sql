@@ -10,18 +10,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- PROFESIONAL
-CREATE TRIGGER trg_insert_profesional_validate_email
-BEFORE INSERT ON "professional"
-FOR EACH ROW
-EXECUTE FUNCTION validate_email();
-
-CREATE TRIGGER trg_update_profesional_validate_email
-BEFORE UPDATE ON "professional"
-FOR EACH ROW
-WHEN (NEW.email <> OLD.email)
-EXECUTE FUNCTION validate_email();
-
 -- USER
 CREATE TRIGGER trg_insert_user_validate_email
 BEFORE INSERT ON "user"

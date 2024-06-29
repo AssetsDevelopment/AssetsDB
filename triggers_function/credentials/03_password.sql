@@ -19,18 +19,6 @@ $$ LANGUAGE plpgsql;
 ---------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------
 
--- PROFESIONAL 
-CREATE TRIGGER trg_insert_profesional_validate_password
-BEFORE INSERT ON "professional"
-FOR EACH ROW
-EXECUTE FUNCTION validate_password();
-
-CREATE TRIGGER trg_update_profesional_validate_password
-BEFORE UPDATE ON "professional"
-FOR EACH ROW
-WHEN (NEW.password <> OLD.password)
-EXECUTE FUNCTION validate_password();
-
 -- USER 
 CREATE TRIGGER trg_insert_user_validate_password
 BEFORE INSERT ON "user"
