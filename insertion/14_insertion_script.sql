@@ -9,7 +9,7 @@ VALUES
 -----------------------------------------------------------------------------------------------
 INSERT INTO "user" ("client_fk", "name", "last_name", "email", "password", "is_admin")
 VALUES 
-  (1, 'user1', 'apellido', 'user1@gmail.com', 'pppppppp', true),
+  (1, 'Julio', 'Barros', 'user1@gmail.com', 'pppppppp', true),
   (1, 'user2', 'apellido', 'user2@gmail.com', 'pppppppp', false),
   (1, 'user3', 'apellido', 'user3@gmail.com', 'pppppppp', false),
   (1, 'user4', 'apellido', 'user4@gmail.com', 'pppppppp', false);
