@@ -45,8 +45,9 @@ La tabla "user" tiene la siguiente estructura:
 | `phone`      | **VARCHAR(30)**   |                                            |
 | `email`      | **VARCHAR(255)**  |                                            |
 | `password`   | **VARCHAR(255)**  | NOT NULL                                   |
+| `gender`     | **gender_options**| NOT NULL                                   |
 | `is_active`  | **BOOLEAN**       | NOT NULL DEFAULT TRUE                      |
-| `user_type`  | **VARCHAR(12)**   | NOT NULL DEFAULT TRUE                      |
+| `user_type`  | **user_types[]**  | NOT NULL                                   |
 | `created_at` | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP         |
 | `updated_at` | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP         |
 
@@ -86,7 +87,6 @@ La tabla "client" tiene la siguiente estructura:
 | `client_fk`   | **FOREIGN KEY**     | REFERENCES "client"(client_id)    |
 | `name`        | **VARCHAR(100)**    | NOT NULL                          |
 | `last_name`   | **VARCHAR(100)**    | NOT NULL                          |
-| `gender`      | **gender_options**  | NOT NULL                          |
 | `is_admin`    | **BOOLEAN**         | NOT NULL DEFAULT FALSE            |
 | `created_at`  | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TI       |
 | `updated_at`  | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TI       |
@@ -113,7 +113,6 @@ La tabla "professional" tiene la siguiente estructura:
 | `professional_id` | **PRIMARY KEY**     | REFERENCES "user"(user_id)        |
 | `name`            | **VARCHAR(100)**    | NOT NULL                          |
 | `last_name`       | **VARCHAR(100)**    | NOT NULL                          |
-| `gender`          | **gender_options**  | NOT NULL                          |
 | `cuit`            | **VARCHAR(20)**     |                                   |
 | `fiscal_status`   | **fiscal_status**   |                                   |
 | `birthdate`       | **DATE**            |                                   |
@@ -153,7 +152,7 @@ La tabla "client_has_professional" tiene la siguiente estructura
 |-------------------|---------------------|----------------------------------------------|
 | `client_fk`       | **FOREIGN KEY**     | NOT NULL                                     |
 | `professional_fk` | **FOREIGN KEY**     | NOT NULL                                     |
-| `sender`          | **profile_options** | NOT NULL                                     |
+| `sender`          | **user_types** | NOT NULL                                     |
 | `is_accept`       | **BOOLEAN**         | NOT NULL DEFAULT FALSE                       |
 | `is_active`       | **BOOLEAN**         | NOT NULL DEFAULT TRUE                        |
 | `created_at`      | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP           |
