@@ -1,7 +1,8 @@
 DROP TYPE IF EXISTS "user_types";
 CREATE TYPE "user_types" AS ENUM (
   'professional',
-  'client'
+  'client',
+  'clientAdmin'
 );
 
 DROP TYPE IF EXISTS "gender_options";
@@ -35,8 +36,9 @@ CREATE TABLE "user" (
     "phone"         VARCHAR(30),         
     "email" 		VARCHAR(255),       
     "password"      VARCHAR(255) 	NOT NULL,
+    "gender"        gender_options  NOT NULL,
     "is_active"     BOOLEAN 		NOT NULL DEFAULT true,
-    "user_type"     VARCHAR(12)     NOT NULL,
+    "user_type"     user_types[]    NOT NULL,
     "created_at"    TIMESTAMP 		NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" 	TIMESTAMP 		NOT NULL DEFAULT CURRENT_TIMESTAMP
 
@@ -63,7 +65,6 @@ CREATE TABLE "client" (
     "client_fk"     INTEGER         REFERENCES "client"(client_id),
     "name"          VARCHAR(100)    NOT NULL,
     "last_name"     VARCHAR(100)    NOT NULL,
-    "gender"        gender_options  NOT NULL,
     "is_admin"      BOOLEAN         NOT NULL DEFAULT false,
     "created_at"    TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at"    TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -80,7 +81,6 @@ CREATE TABLE "professional" (
     "professional_id"   SERIAL PRIMARY KEY,
     "name"              VARCHAR(100)    NOT NULL,
     "last_name"         VARCHAR(100)    NOT NULL,
-    "gender"            gender_options  NOT NULL,
     "cuit"              VARCHAR(20),
     "fiscal_status"     fiscal_status,
     "birthdate"         DATE,
