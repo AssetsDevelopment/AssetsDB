@@ -32,6 +32,8 @@ CREATE TYPE "urgency_options" AS ENUM (
 DROP TABLE IF EXISTS "user" CASCADE;
 CREATE TABLE "user" (
     "user_id"       INTEGER generated ALWAYS as IDENTITY PRIMARY KEY,
+    "name"          VARCHAR(100)    NOT NULL,
+    "last_name"     VARCHAR(100)    NOT NULL,
     "profile"       VARCHAR(100) 	NOT NULL UNIQUE,
     "phone"         VARCHAR(30),         
     "email" 		VARCHAR(255),       
@@ -63,8 +65,6 @@ DROP TABLE IF EXISTS "client" CASCADE;
 CREATE TABLE "client" (
     "client_id"     SERIAL PRIMARY KEY,
     "client_fk"     INTEGER         REFERENCES "client"(client_id),
-    "name"          VARCHAR(100)    NOT NULL,
-    "last_name"     VARCHAR(100)    NOT NULL,
     "is_admin"      BOOLEAN         NOT NULL DEFAULT false,
     "created_at"    TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at"    TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -79,8 +79,6 @@ CREATE TABLE "client" (
 DROP TABLE IF EXISTS "professional" CASCADE;
 CREATE TABLE "professional" (
     "professional_id"   SERIAL PRIMARY KEY,
-    "name"              VARCHAR(100)    NOT NULL,
-    "last_name"         VARCHAR(100)    NOT NULL,
     "cuit"              VARCHAR(20),
     "fiscal_status"     fiscal_status,
     "birthdate"         DATE,

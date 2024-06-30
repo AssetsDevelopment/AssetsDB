@@ -41,6 +41,8 @@ La tabla "user" tiene la siguiente estructura:
 | Columna      | Tipo              | Restricciones                              |
 |--------------|-------------------|--------------------------------------------|
 | `user_id`    | **PRIMARY KEY**   |                                            |
+| `name`       | **VARCHAR(100)**  | NOT NULL                                   |
+| `last_name`  | **VARCHAR(100)**  | NOT NULL                                   |
 | `profile`    | **VARCHAR(100)**  | NOT NULL UNIQUE                            |
 | `phone`      | **VARCHAR(30)**   |                                            |
 | `email`      | **VARCHAR(255)**  |                                            |
@@ -85,8 +87,6 @@ La tabla "client" tiene la siguiente estructura:
 |---------------|---------------------|-----------------------------------|
 | `client_id`   | **PRIMARY KEY**     | REFERENCES "user"(user_id)        |
 | `client_fk`   | **FOREIGN KEY**     | REFERENCES "client"(client_id)    |
-| `name`        | **VARCHAR(100)**    | NOT NULL                          |
-| `last_name`   | **VARCHAR(100)**    | NOT NULL                          |
 | `is_admin`    | **BOOLEAN**         | NOT NULL DEFAULT FALSE            |
 | `created_at`  | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TI       |
 | `updated_at`  | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TI       |
@@ -111,8 +111,6 @@ La tabla "professional" tiene la siguiente estructura:
 | Columna           | Tipo                | Restricciones                     |
 |-------------------|---------------------|-----------------------------------|
 | `professional_id` | **PRIMARY KEY**     | REFERENCES "user"(user_id)        |
-| `name`            | **VARCHAR(100)**    | NOT NULL                          |
-| `last_name`       | **VARCHAR(100)**    | NOT NULL                          |
 | `cuit`            | **VARCHAR(20)**     |                                   |
 | `fiscal_status`   | **fiscal_status**   |                                   |
 | `birthdate`       | **DATE**            |                                   |
