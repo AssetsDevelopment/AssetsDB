@@ -50,202 +50,57 @@ La tabla "user" tiene la siguiente estructura:
 | `created_at` | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP         |
 | `updated_at` | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP         |
 
+| Índice Único                                                            |
+|-------------------------------------------------------------------------|
+| `UNIQUE INDEX ((CASE WHEN email IS NOT NULL THEN email END))`           |
+| `UNIQUE INDEX ((CASE WHEN phone IS NOT NULL THEN phone END))`           |
+
 ### Descripción
 [COMPLETAR_DESCRIPCION]
 
+### Restricciones (CHECK)
+| Campo        | Descripción                                                                |
+|--------------|----------------------------------------------------------------------------|
+| `email`      | Verifica que al menos uno de los campos 'email' o 'phone' esté presente.   |
+| `email`      | Verifica que el campo 'email' no esté vacío.                               |
+
 ### Validaciones (TRIGGER)
-| Campo               | Disparador                | Descripción                                                                                            |
-|---------------------|---------------------------|--------------------------------------------------------------------------------------------------------|
+| Campo               | Disparador                | Descripción                             |
+|---------------------|---------------------------|-----------------------------------------|
 | `email`             | **[I][U][<>][email]**     | Valida contra una "regex" que el valor tenga un formato correcto y pertenezca a un dominio reconocido. |
 | `password`          | **[I][U][<>][password]**  | Valida que el valor >= 8 y luego lo hashea.                                                            |
-| `is_admin`          | **[I][U][<>][is_admin]**  | Valida que exista un solo usuario administrador por cliente.                                           |
-| `client.is_active`  | **[I][U]**                | Valida que el cliente referenciado este activo.                                                        |
 | `user_type`         | **[U]**                   | Valida que el valor no pueda ser modificado.                                                           |
 | `created_at`        | **[U]**                   | Valida que el valor no pueda ser modificado.                                                           |
 | `updated_at`        | **[U]**                   | Actualiza el valor automaticamente.                                                                    |
 
 ***
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## Tabla "client"
 
 ### Estructura
 La tabla "client" tiene la siguiente estructura:
 
-| Columna       | Tipo              | Restricciones              |
-|---------------|-------------------|----------------------------|
-| `client_id`   | **PRIMARY KEY**   |                            |
-| `name`        | **VARCHAR(100)**  | NOT NULL                   |
-| `last_name`   | **VARCHAR(100)**  | NOT NULL                   |
-| `is_active`   | **BOOLEAN**       | NOT NULL DEFAULT TRUE      |
-| `created_at`  | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TI|
-| `updated_at`  | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TI|
+| Columna       | Tipo                | Restricciones                     |
+|---------------|---------------------|-----------------------------------|
+| `client_id`   | **PRIMARY KEY**     |                                   |
+| `client_fk`   | **FOREIGN KEY**     | REFERENCES "client"(client_id)    |
+| `user_fk`     | **FOREIGN KEY**     | REFERENCES "user"(user_id)        |
+| `name`        | **VARCHAR(100)**    | NOT NULL                          |
+| `last_name`   | **VARCHAR(100)**    | NOT NULL                          |
+| `gender`      | **gender_options**  | NOT NULL                          |
+| `is_admin`    | **BOOLEAN**         | NOT NULL DEFAULT FALSE            |
+| `created_at`  | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TI       |
+| `updated_at`  | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TI       |
 
 ### Descripción
-La tabla "client" almacena información detallada sobre los coordinadores de interacción domiciliaria que tienen acceso a la dashboard. Cada registro en esta tabla representa un cliente (coordinador) y desempeña un papel central al ser el punto de conexión para vincular información relacionada en otras tablas.
-
-Esta tabla actúa como el núcleo fundamental de la base de datos, ya que posibilita la vinculación de información específica de cada coordinador con otras tablas. Su presencia simplifica la obtención de datos completos relacionados con un coordinador en particular, estableciendo así una base sólida para la estructura de la base de datos.
+[COMPLETAR_DESCRIPCION]
 
 ### Validaciones (TRIGGER)
-| Campo               | Disparador                | Descripción                                         |
-|---------------------|---------------------------|-----------------------------------------------------|
-| `created_at`        | **[U]**                   | Valida que el valor no pueda ser modificado.        |
-| `updated_at`        | **[U]**                   | Actualiza el valor automaticamente.                 |
-
-***
-
-## Tabla "user"
-
-### Estructura
-La tabla "user" tiene la siguiente estructura:
-
-| Llave Compuesta                                                           |
-|---------------------------------------------------------------------------|
-| `PRIMARY KEY ("client_fk", "user_id")`                                    |
-
-| Columna      | Tipo              | Restricciones                              |
-|--------------|-------------------|--------------------------------------------|
-| `user_id`    | **INTEGER**       |                                            |
-| `client_fk`  | **FOREIGN KEY**   | NOT NULL REFERENCES "client"(client_id)    |
-| `name`       | **VARCHAR(100)**  | NOT NULL                                   |
-| `last_name`  | **VARCHAR(100)**  | NOT NULL                                   |
-| `email`      | **VARCHAR(255)**  | NOT NULL UNIQUE                            |
-| `password`   | **VARCHAR(255)**  | NOT NULL                                   |
-| `is_admin`   | **BOOLEAN**       | NOT NULL DEFAULT FALSE                     |
-| `is_active`  | **BOOLEAN**       | NOT NULL DEFAULT TRUE                      |
-| `user_type`  | **CHAR(6)**       | NOT NULL DEFAULT 'client'                  |
-| `created_at` | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP         |
-| `updated_at` | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP         |
-
-### Descripción
-La tabla "user" almacena información de los usuarios del sistema, como nombres, correos electrónicos, contraseñas, roles y estados de activación. Su función principal es gestionar y mantener registros de los usuarios.
-
-Esta tabla facilita la gestión y autenticación de los usuarios que interactúan con la dashboard. La relación con la tabla "client" garantiza que cada usuario esté asociado a un coordinador específico. Es importante destacar que solo puede existir un usuario con privilegios de administrador por cada coordinador, asegurando así un control preciso de los accesos y roles.
-
-### Validaciones (TRIGGER)
-| Campo               | Disparador                | Descripción                                                                                            |
-|---------------------|---------------------------|--------------------------------------------------------------------------------------------------------|
-| `email`             | **[I][U][<>][email]**     | Valida contra una "regex" que el valor tenga un formato correcto y pertenezca a un dominio reconocido. |
-| `password`          | **[I][U][<>][password]**  | Valida que el valor >= 8 y luego lo hashea.                                                            |
-| `is_admin`          | **[I][U][<>][is_admin]**  | Valida que exista un solo usuario administrador por cliente.                                           |
-| `client.is_active`  | **[I][U]**                | Valida que el cliente referenciado este activo.                                                        |
-| `user_type`         | **[U]**                   | Valida que el valor no pueda ser modificado.                                                           |
-| `created_at`        | **[U]**                   | Valida que el valor no pueda ser modificado.                                                           |
-| `updated_at`        | **[U]**                   | Actualiza el valor automaticamente.                                                                    |
-
-***
-
-## Tabla "screen"
-
-### Estructura
-La tabla "screen" tiene la siguiente estructura:
-
-| Columna        | Tipo              | Restricciones                        |
-|----------------|-------------------|--------------------------------------|
-| `screen_id`    | **PRIMARY KEY**   |                                      |
-| `name`         | **VARCHAR(100)**  | NOT NULL                             |
-| `is_active`    | **BOOLEAN**       | NOT NULL DEFAULT TRUE                |
-| `created_at`   | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP   |
-| `updated_at`   | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP   |
-
-### Descripción
-La tabla "screen" almacena información sobre las vistas de la dashboard. Cada registro en esta tabla representa una pantalla o vista, proporcionando control sobre su activación y asignación de permisos.
-
-Su función principal es la gestión de las vistas de la dashboard, permitiendo controlar la activación o desactivación de cada pantalla según las necesidades del sistema. Cada registro de la tabla representa una pantalla que puede ser configurada de manera independiente, brindando flexibilidad en la administración de las opciones disponibles en la interfaz del sistema.
-
-### Validaciones (TRIGGER)
-| Campo               | Disparador                | Descripción                                       |
-|---------------------|---------------------------|---------------------------------------------------|
-| `created_at`        | **[U]**                   | Valida que el valor no pueda ser modificado.      |
-| `updated_at`        | **[U]**                   | Actualiza el valor automaticamente.               |
-
-***
-
-## Tabla "permission"
-
-### Estructura
-La tabla "permission" tiene la siguiente estructura:
-
-| Llave Compuesta                                                                   |
-|-----------------------------------------------------------------------------------|
-| `PRIMARY KEY ("user_fk", "screen_fk")`                                            |
-| `FOREIGN KEY ("client_fk", "user_fk") REFERENCES "user"("client_fk", "user_id")`  |
-
-| Columna         | Tipo              | Restricciones                                   |
-|---------------- |-------------------|-------------------------------------------------|
-| `client_fk`     | **FOREIGN KEY**   | NOT NULL                                        |
-| `user_fk`       | **FOREIGN KEY**   | NOT NULL                                        |
-| `screen_fk`     | **FOREIGN KEY**   | NOT NULL REFERENCES screen(screen_id)           |
-| `created_at`    | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP              |
-| `updated_at`    | **TIMESTAMP**     | NOT NULL DEFAULT CURRENT_TIMESTAMP              |
-
-### Descripción
-La tabla pivot "permission" establece relaciones entre usuarios, vistas y clientes, definiendo qué usuarios tienen acceso a qué vistas en el contexto de un cliente específico.
-
-Su función principal es determinar qué usuarios tienen permisos para acceder a determinadas vistas dentro del contexto de un cliente específico. La existencia de un registro en esta tabla indica que un usuario tiene autorización para acceder a una vista asociada a un cliente determinado.
-
-Esta tabla facilita la gestión de las vistas de la dashboard, permitiendo controlar la activación y asignación de permisos. Cada registro representa una pantalla que puede ser activada o desactivada según las necesidades del sistema, garantizando así un control preciso sobre los accesos de los usuarios en relación con las vistas disponibles.
-
-### Validaciones (TRIGGER)
-| Campo               | Disparador                | Descripción                                         |
-|---------------------|---------------------------|-----------------------------------------------------|
-| `client.is_active`  | **[I][U]**                | Valida que el cliente referenciado este activo.     |
-| `user.is_active`    | **[I][U]**                | Valida que el usuario referenciado este activo.     |
-| `screen.is_active`  | **[I][U]**                | Valida que la vista referenciada este activa.       |
-| `created_at`        | **[U]**                   | Valida que el valor no pueda ser modificado.        |
-| `updated_at`        | **[U]**                   | Actualiza el valor automaticamente.                 |
+| Campo               | Disparador                | Descripción                                 |
+|---------------------|---------------------------|---------------------------------------------|
+| `is_admin`          | **[I][U][<>][is_admin]**  | Valida que exista un solo usuario administrador por cliente.|
+| `created_at`        | **[U]**                   | Valida que el valor no pueda ser modificado.|
+| `updated_at`        | **[U]**                   | Actualiza el valor automaticamente.         |
 
 ***
 
@@ -254,92 +109,36 @@ Esta tabla facilita la gestión de las vistas de la dashboard, permitiendo contr
 ### Estructura
 La tabla "professional" tiene la siguiente estructura:
 
-| Columna           | Tipo            | Restricciones                     |
+| Columna           | Tipo                | Restricciones                     |
 |-------------------|---------------------|-----------------------------------|
 | `professional_id` | **PRIMARY KEY**     |                                   |
+| `user_fk`         | **FOREIGN KEY**     | REFERENCES "user"(user_id)        |
 | `name`            | **VARCHAR(100)**    | NOT NULL                          |
 | `last_name`       | **VARCHAR(100)**    | NOT NULL                          |
 | `gender`          | **gender_options**  | NOT NULL                          |
 | `cuit`            | **VARCHAR(20)**     |                                   |
 | `fiscal_status`   | **fiscal_status**   |                                   |
-| `phone`           | **VARCHAR(30)**     | NOT NULL                          |
-| `email`           | **VARCHAR(255)**    |                                   |
-| `password`        | **VARCHAR(255)**    | NOT NULL                          |
 | `birthdate`       | **DATE**            |                                   |
 | `bank`            | **VARCHAR(255)**    |                                   |
 | `bank_account`    | **VARCHAR(50)**     |                                   |
 | `cbu`             | **VARCHAR(23)**     |                                   |
 | `alias`           | **VARCHAR(50)**     |                                   |
-| `note`            | **TEXT**            |                                   |
-| `user_type`       | **CHAR(12)**        | NOT NULL DEFAULT 'professional'   |
-| `is_active`       | **BOOLEAN**         | NOT NULL DEFAULT TRUE             |
 | `created_at`      | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP|
 | `updated_at`      | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP|
 
-| Índice Único                                                            |
-|-------------------------------------------------------------------------|
-| `UNIQUE INDEX ((CASE WHEN email IS NOT NULL THEN email END))`           |
-| `UNIQUE INDEX ((CASE WHEN phone IS NOT NULL THEN phone END))`           |
-
 ### Descripción
-La tabla "professional" almacena información sobre los profesionales que tienen acceso a la aplicación móvil. Cada registro en esta tabla representa un profesional independiente con la capacidad de establecer vínculos con distintos coordinadores.
-
-Su función principal es gestionar la información detallada de los profesionales que utilizan la aplicación móvil. Estos profesionales pueden registrarse de manera independiente y luego tienen la flexibilidad de vincularse con varios coordinadores, lo que proporciona un enfoque descentralizado y versátil para la gestión de profesionales en la plataforma.
+[COMPLETAR_DESCRIPCION]
 
 ### Restricciones (CHECK)
-| Campo        | Descripción                                                                                |
-|--------------|--------------------------------------------------------------------------------------------|
-| `email`      | Verifica que al menos uno de los campos 'email' o 'phone' esté presente.                   |
-| `email`      | Verifica que el campo 'email' no esté vacío.                                               |
-| `birthdate`  | Verifica que el profesional tenga entre 18 y 85 años según su fecha de nacimiento.         |
-| `phone`      | Valida el formato del número de teléfono según una "regex".                                |
+| Campo        | Descripción                                                                |
+|--------------|----------------------------------------------------------------------------|
+| `birthdate`  | Verifica que el profesional tenga entre 18 y 85 años según su fecha de nacimiento.|
 
 ### Validaciones (TRIGGER)
-| Campo               | Disparador                | Descripción                                                                                            |
-|---------------------|---------------------------|--------------------------------------------------------------------------------------------------------|
-| `email`             | **[I][U][<>][email]**     | Valida contra una "regex" que el valor tenga un formato correcto y pertenezca a un dominio reconocido. |
-| `password`          | **[I][U][<>][password]**  | Valida que el valor >= 8 y luego lo hashea.                                                            |
-| `user_type`         | **[U]**                   | Valida que el valor no pueda ser modificado.                                                           |
+| Campo               | Disparador                | Descripción                             |
+|---------------------|---------------------------|-----------------------------------------|
 | `created_at`        | **[U]**                   | Valida que el valor no pueda ser modificado.                                                           |
 | `updated_at`        | **[U]**                   | Actualiza el valor automaticamente.                                                                    |
-
-***
-
-## Tabla "work_invitation"
-
-### Estructura
-La tabla "work_invitation" tiene la siguiente estructura  
-
-| Llave Compuesta                                                                           |
-|-------------------------------------------------------------------------------------------|
-| `PRIMARY KEY ("client_fk", "professional_fk")`                                            |
-
-| Columna           | Tipo                | Restricciones                                       |
-|-------------------|---------------------|-----------------------------------------------------|
-| `client_fk`       | **FOREIGN KEY**     | NOT NULL REFERENCES "client"(client_id)             |
-| `professional_fk` | **FOREIGN KEY**     | NOT NULL REFERENCES "professional"(professional_id) |
-| `sender`          | **profile_options** | NOT NULL                                            |
-| `is_accept`       | **BOOLEAN**         | NOT NULL DEFAULT FALSE                              |
-| `created_at`      | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP                  |
-| `updated_at`      | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP                  |
-
-### Descripción
-La tabla pivot "work_invitation" gestiona las invitaciones entre clientes y profesionales, marcando el primer paso para la creación de una relación laboral. Cada registro en esta tabla representa una invitación enviada por un cliente a un profesional, y se indica si la invitación ha sido aceptada.
-
-Su función principal es facilitar la gestión de las invitaciones entre clientes y profesionales, registrando información clave como el remitente de la invitación, el estado de aceptación y otros detalles relevantes en el proceso de establecimiento de una relación laboral. Esta tabla proporciona una visión clara y organizada del flujo de invitaciones, simplificando la administración de las relaciones laborales en la plataforma.
-
-### Validaciones (TRIGGER)
-| Campo                     | Disparador                | Descripción                                                 |
-|---------------------------|---------------------------|-------------------------------------------------------------|
-| `client.is_active`        | **[I][U]**                | Valida que el cliente referenciado este activo.             |
-| `professional.is_active`  | **[I][U]**                | Valida que el profesional referenciado este activo.         |
-| `is_accept`               | **[I]**                   | Valida que no se pueda insertar una invitacion ya aceptada. |
-| `is_accept`               | **[U][<>][is_accept]**    | Se ejecuta: `process_professional_assignment_change`.       |
-| `created_at`              | **[U]**                   | Valida que el valor no pueda ser modificado.                |
-| `updated_at`              | **[U]**                   | Actualiza el valor automaticamente.                         |
-
-### Procedimiento Almacenado
-* `process_professional_assignment_change`: Este procedimiento en caso de que se acepte una invitación, se encarga de verificar en la tabla "client_has_professional" si la relacion entre profesional y cliente ya existe. En caso de que no tengan un registro, se crea uno con `TRUE` en la columna `is_active`. En caso de que ya tengan una relación, se actualiza el campo `is_active` de la tabla "client_has_professional" a `TRUE`. En caso de que se cancele una relación, se ejecuta un proceso destructivo, donde se eliminan los registros de las tabla "treatment_has_professional" que referencien los valores que el profesional tenia con ese cliente, luego se desvincula al profesional de todos los pedidos asignados en la tabla "order" y finalmente se `desactiva` el registro de la tabla "client_has_professional". Nunca se elimina un registro de la tabla "client_has_professional", ya que se necesita para mantener la integridad referencial de la tabla "order" con los pedidos que tuvo asignados y ya finalizaron.
 
 ***
 
@@ -348,31 +147,28 @@ Su función principal es facilitar la gestión de las invitaciones entre cliente
 ### Estructura
 La tabla "client_has_professional" tiene la siguiente estructura  
 
-| Llave Compuesta                                                                                            |
-|------------------------------------------------------------------------------------------------------------|
-| `PRIMARY KEY ("client_fk", "professional_fk")`                                                             |
-| `FOREIGN KEY ("client_fk", "professional_fk") REFERENCES "work_invitation"("client_fk","professional_fk")` |
+| Llave Compuesta                                                                           |
+|-------------------------------------------------------------------------------------------|
+| `PRIMARY KEY ("client_fk", "professional_fk")`                                            |
 
-| Columna           | Tipo                | Restricciones                                                        |
-|-------------------|---------------------|----------------------------------------------------------------------|
-| `client_fk`       | **FOREIGN KEY**     | NOT NULL                                                             |
-| `professional_fk` | **FOREIGN KEY**     | NOT NULL                                                             |
-| `is_accept`       | **BOOLEAN**         | NOT NULL DEFAULT FALSE                                               |
-| `created_at`      | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP                                   |
-| `updated_at`      | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP                                   |
+| Columna           | Tipo                | Restricciones                                |
+|-------------------|---------------------|----------------------------------------------|
+| `client_fk`       | **FOREIGN KEY**     | NOT NULL                                     |
+| `professional_fk` | **FOREIGN KEY**     | NOT NULL                                     |
+| `sender`          | **profile_options** | NOT NULL                                     |
+| `is_accept`       | **BOOLEAN**         | NOT NULL DEFAULT FALSE                       |
+| `is_active`       | **BOOLEAN**         | NOT NULL DEFAULT TRUE                        |
+| `created_at`      | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP           |
+| `updated_at`      | **TIMESTAMP**       | NOT NULL DEFAULT CURRENT_TIMESTAMP           |
 
 ### Descripción
-La tabla "client_has_professional" juega un papel fundamental como vínculo entre clientes y profesionales, permitiendo la colaboración, asignación de pedidos y trabajo conjunto. Cada registro en esta tabla representa una relación establecida entre un cliente y un profesional, originada a partir de una invitación aceptada en "work_invitation".
-
-Su función principal es ser esencial para establecer y gestionar relaciones activas entre clientes y profesionales. Actúa como el punto de conexión central para asignar pedidos, colaborar y trabajar de manera conjunta en el sistema, proporcionando una estructura sólida para la cooperación efectiva entre ambas partes.
+[COMPLETAR_DESCRIPCION]
 
 ### Validaciones (TRIGGER)
-| Campo                     | Disparador                | Descripción                                                 |
-|---------------------------|---------------------------|-------------------------------------------------------------|
-| `client.is_active`        | **[I][U]**                | Valida que el cliente referenciado este activo.             |
-| `professional.is_active`  | **[I][U]**                | Valida que el profesional referenciado este activo.         |
-| `created_at`              | **[U]**                   | Valida que el valor no pueda ser modificado.                |
-| `updated_at`              | **[U]**                   | Actualiza el valor automaticamente.                         |
+| Campo                     | Disparador                | Descripción                      |
+|---------------------------|---------------------------|----------------------------------|
+| `created_at`              | **[U]**                   | Valida que el valor no pueda ser modificado.|
+| `updated_at`              | **[U]**                   | Actualiza el valor automaticamente.|
 
 ***
 
@@ -389,7 +185,6 @@ La tabla "company" tiene la siguiente estructura:
 |----------------|-------------------|--------------------------------------------------|
 | `company_id`   | **PRIMARY KEY**   |                                                  |
 | `client_fk`    | **FOREIGN KEY**   | NOT NULL                                         |
-| `user_fk`      | **FOREIGN KEY**   | NOT NULL                                         |
 | `name`         | **VARCHAR(100)**  | NOT NULL                                         |
 | `cuit`         | **VARCHAR(20)**   |                                                  |
 | `note`         | **TEXT**          |                                                  |
@@ -425,7 +220,6 @@ La tabla "patient" tiene la siguiente estructura:
 |----------------------|-----------------------|--------------------------------------------|
 | `patient_id`         | **PRIMARY KEY**       |                                            |
 | `client_fk`          | **FOREIGN KEY**       | NOT NULL                                   |
-| `user_fk`            | **FOREIGN KEY**       | NOT NULL                                   |
 | `company_fk`         | **FOREIGN KEY**       | NOT NULL REFERENCES company(company_id)    |
 | `name`               | **VARCHAR(100)**      | NOT NULL                                   |
 | `healthcare_provider`| **VARCHAR(100)**      |                                            |
@@ -472,7 +266,6 @@ La tabla "treatment" tiene la siguiente estructura:
 |-----------------|-------------------|------------------------------------------------|
 | `treatment_id`  | **PRIMARY KEY**   |                                                |
 | `client_fk`     | **FOREIGN KEY**   | NOT NULL                                       |
-| `user_fk`       | **FOREIGN KEY**   | NOT NULL                                       |
 | `name`          | **VARCHAR(100)**  | NOT NULL                                       |
 | `abbreviation`  | **VARCHAR(10)**   | NOT NULL                                       |
 | `description`   | **TEXT**          |                                                |
@@ -502,13 +295,11 @@ La tabla "company_has_treatment" tiene la siguiente estructura:
 
 | Llave Compuesta                                                                   |
 |-----------------------------------------------------------------------------------|
-| `PRIMARY KEY ("company_fk", "treatment_fk")`                                      |
-| `FOREIGN KEY ("client_fk", "user_fk") REFERENCES "user"("client_fk", "user_id")`  |
+| `PRIMARY KEY ("client_fk", "company_fk", "treatment_fk")`                                      |
 
 | Columna           | Tipo                   | Restricciones                            |
 |-------------------|------------------------|------------------------------------------|
 | `client_fk`       | **FOREIGN KEY**        | NOT NULL                                 |
-| `user_fk`         | **FOREIGN KEY**        | NOT NULL                                 |
 | `company_fk`      | **FOREIGN KEY**        | NOT NULL                                 |
 | `treatment_fk`    | **FOREIGN KEY**        | NOT NULL                                 |
 | `value`           | **DECIMAL(7,2)**       | NOT NULL                                 |
@@ -544,8 +335,7 @@ La tabla "treatment_has_professional" tiene la siguiente estructura:
 
 | Llave Compuesta                                                                                                     |
 |---------------------------------------------------------------------------------------------------------------------|
-| `PRIMARY KEY ("company_fk", "treatment_fk", "professional_fk")`                                                     |
-| `FOREIGN KEY ("client_fk", "user_fk") REFERENCES "user"("client_fk", "user_id")`                                    |
+| `PRIMARY KEY ("clien_fk", "professional_fk", "company_fk", "treatment_fk")`                                                     |
 | `FOREIGN KEY ("client_fk", "professional_fk") REFERENCES "client_has_professional"("client_fk", "professional_fk")` |
 
 | Columna           | Tipo                    | Restricciones                                                             |
@@ -597,7 +387,6 @@ La tabla "order" tiene la siguiente estructura:
 | `order_id`          | **PRIMARY KEY**     |                                                                             |
 | `order_fk`          | **FOREIGN KEY**     | REFERENCES "order"(order_id)                                                |
 | `client_fk`         | **FOREIGN KEY**     | NOT NULL                                                                    |
-| `user_fk`           | **FOREIGN KEY**     | NOT NULL                                                                    |
 | `patient_fk`        | **FOREIGN KEY**     | NOT NULL REFERENCES patient(patient_id)                                     |
 | `treatment_fk`      | **FOREIGN KEY**     | NOT NULL REFERENCES treatment(treatment_id)                                 |
 | `professional_fk`   | **FOREIGN KEY**     |                                                                             |
@@ -661,7 +450,6 @@ La tabla "claim" tiene la siguiente estructura:
 | `claim_id`      | **PRIMARY KEY**     |                                                 |
 | `order_fk`      | **FOREIGN KEY**     | NOT NULL REFERENCES "order"(order_id)           |
 | `client_fk`     | **FOREIGN KEY**     | NOT NULL                                        |
-| `user_fk`       | **FOREIGN KEY**     | NOT NULL                                        |
 | `cause`         | **TEXT**            | NOT NULL                                        |
 | `urgency`       | **urgency_options** | NOT NULL                                        |
 | `reported_date` | **TIMESTAMP**       | NOT NULL                                        |
