@@ -82,9 +82,8 @@ La tabla "client" tiene la siguiente estructura:
 
 | Columna       | Tipo                | Restricciones                     |
 |---------------|---------------------|-----------------------------------|
-| `client_id`   | **PRIMARY KEY**     |                                   |
+| `client_id`   | **PRIMARY KEY**     | REFERENCES "user"(user_id)        |
 | `client_fk`   | **FOREIGN KEY**     | REFERENCES "client"(client_id)    |
-| `user_fk`     | **FOREIGN KEY**     | REFERENCES "user"(user_id)        |
 | `name`        | **VARCHAR(100)**    | NOT NULL                          |
 | `last_name`   | **VARCHAR(100)**    | NOT NULL                          |
 | `gender`      | **gender_options**  | NOT NULL                          |
@@ -111,8 +110,7 @@ La tabla "professional" tiene la siguiente estructura:
 
 | Columna           | Tipo                | Restricciones                     |
 |-------------------|---------------------|-----------------------------------|
-| `professional_id` | **PRIMARY KEY**     |                                   |
-| `user_fk`         | **FOREIGN KEY**     | REFERENCES "user"(user_id)        |
+| `professional_id` | **PRIMARY KEY**     | REFERENCES "user"(user_id)        |
 | `name`            | **VARCHAR(100)**    | NOT NULL                          |
 | `last_name`       | **VARCHAR(100)**    | NOT NULL                          |
 | `gender`          | **gender_options**  | NOT NULL                          |
