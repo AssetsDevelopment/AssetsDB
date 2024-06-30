@@ -59,15 +59,16 @@ CREATE UNIQUE INDEX unique_phone_exclude_empty ON "user" ((CASE WHEN phone IS NO
 -----------------------------------------------------------------------------------------------
 DROP TABLE IF EXISTS "client" CASCADE;
 CREATE TABLE "client" (
-    "client_id"     INTEGER generated ALWAYS as IDENTITY PRIMARY KEY,
+    "client_id"     SERIAL PRIMARY KEY,
     "client_fk"     INTEGER         REFERENCES "client"(client_id),
-    "user_fk"       INTEGER         NOT NULL REFERENCES "user"(user_id),
     "name"          VARCHAR(100)    NOT NULL,
     "last_name"     VARCHAR(100)    NOT NULL,
     "gender"        gender_options  NOT NULL,
     "is_admin"      BOOLEAN         NOT NULL DEFAULT false,
     "created_at"    TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at"    TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "updated_at"    TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_client_user FOREIGN KEY (client_id) REFERENCES "user"(user_id)
 );
 
 
@@ -76,8 +77,7 @@ CREATE TABLE "client" (
 -----------------------------------------------------------------------------------------------
 DROP TABLE IF EXISTS "professional" CASCADE;
 CREATE TABLE "professional" (
-    "professional_id"   INTEGER generated ALWAYS as IDENTITY PRIMARY KEY,
-    "user_fk"           INTEGER         NOT NULL REFERENCES "user"(user_id),
+    "professional_id"   SERIAL PRIMARY KEY,
     "name"              VARCHAR(100)    NOT NULL,
     "last_name"         VARCHAR(100)    NOT NULL,
     "gender"            gender_options  NOT NULL,
@@ -89,10 +89,12 @@ CREATE TABLE "professional" (
     "cbu"               VARCHAR(23),
     "alias"             VARCHAR(50),
     "created_at"        TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at"        TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP
-  
-  -- Verifica que el profesional tenga entre 18 y 85 años 
-  CHECK (birthdate <= CURRENT_DATE - INTERVAL '18 years' AND birthdate >= CURRENT_DATE - INTERVAL '85 years')
+    "updated_at"        TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_professional_user FOREIGN KEY (professional_id) REFERENCES "user"(user_id),
+
+    -- Verifica que el profesional tenga entre 18 y 85 años 
+    CHECK (birthdate <= CURRENT_DATE - INTERVAL '18 years' AND birthdate >= CURRENT_DATE - INTERVAL '85 years')
 );
 
 
